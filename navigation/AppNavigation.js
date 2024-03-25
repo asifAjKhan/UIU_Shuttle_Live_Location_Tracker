@@ -2,10 +2,11 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import HomeScreen from '../screens/HomeScreen';
-import MapScreen from '../screens/MapScreen'
-import NewPage from '../screens/NewPage'
-import HomePage from '../screens/HomePage';
+import LoginScreen from '../screens/LoginScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 
 const Stack =  createNativeStackNavigator() 
  
@@ -14,10 +15,10 @@ function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="home"  options={{headerShown : false}} component={HomePage} />
-        <Stack.Screen name="Home"  component={HomeScreen} />
-        <Stack.Screen name="Map" options={{headerShown : false}} component={MapScreen} />
-        <Stack.Screen name ="newPage" component={NewPage} />
+        <Stack.Screen name="Home"  options={{headerShown : false}} component={WelcomeScreen} />
+        <Stack.Screen name="Login"  options={{headerShown : false}}  component={LoginScreen} />
+        <Stack.Screen name="Signup" options={{headerShown : false}} component={SignUpScreen} />
+        <Stack.Screen name ="Welcome"  options={{headerShown : false}} component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
