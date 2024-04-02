@@ -12,10 +12,13 @@ import
 
 }
  from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {styles} from '../theme'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation , useRoute} from '@react-navigation/native';
+//import router from '../../ShuttleServer/routeHandler/driverLocationHandler';
+
+import axios from 'axios'
 
 
 
@@ -26,6 +29,46 @@ const topMargin = ios? '' : 'mt-10'
 const SignUpDriverScreen = () => {
 
   const navigation = useNavigation()
+
+  const {params : role} = useRoute()
+
+
+  const [name, setName] = useState('');
+  const [email, setEmailOrPhone] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleFormSubmit = async () => {
+      try {
+        const response = await axios.post('http://192.168.0.102:3000/auth/register', {
+          role,
+          name,
+          email,
+          password
+        });
+        console.log('Form submitted successfully:', response.data);
+
+        navigation.navigate('Login', {role : 'driver'})
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
+    };
+
+  
+    
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
   return (
     <ScrollView style={style.container}>
 
@@ -74,9 +117,11 @@ const SignUpDriverScreen = () => {
               className="font-semibold ml-5 mr-5 text-lg "
               placeholder='Driver Name'
               placeholderTextColor="#999"
+              value={name}
+              onChangeText={text => setName(text)}
             />
-
-            <TextInput
+          
+          {/* <TextInput
               style={{ height: 40,
                 borderBottomWidth: 1,
                 borderBottomColor: '#ff9900',
@@ -89,7 +134,7 @@ const SignUpDriverScreen = () => {
               className="font-semibold ml-5 mr-5 text-lg "
               placeholder='Bus Number'
               placeholderTextColor="#999"
-            />
+            /> */}
 
             <TextInput
               style={{ height: 40,
@@ -105,6 +150,9 @@ const SignUpDriverScreen = () => {
               placeholder='Email'
               placeholderTextColor="#999"
               keyboardType="email-address" 
+
+              value={email}
+              onChangeText={text => setEmailOrPhone(text)}
             />
 
             <TextInput
@@ -121,10 +169,14 @@ const SignUpDriverScreen = () => {
               placeholder='Password'
               placeholderTextColor="#999"
               secureTextEntry 
+
+              value={password}
+              onChangeText={text => setPassword(text)}
+              
             />
 
 
-            <TouchableOpacity className="mt-9" >
+            <TouchableOpacity className="mt-9" onPress={handleFormSubmit} >
               <Text style={[styles.background, styles.text]}  className="p-4 text-center rounded-md mt-3  ml-5 mr-5 w-80 font-extrabold">Register</Text>
             </TouchableOpacity>
 

@@ -17,6 +17,8 @@ import React, { useState } from 'react'
 import {styles} from '../theme'
 import { useNavigation } from '@react-navigation/native';
 
+import axios from 'axios';
+
 
 
 
@@ -26,6 +28,31 @@ const topMargin = ios? '' : 'mt-10'
 const SignUpStudentScreen = () => {
 
   const navigation = useNavigation()
+
+
+
+  //const {role} = router.param
+
+
+  const [name, setName] = useState('');
+  const [email, setEmailOrPhone] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleFormSubmit = async () => {
+    try {
+      const response = await axios.post('http://192.168.0.102:3000/auth/register', {
+        name,
+        email,
+        password
+      })
+      console.log('Form submitted successfully:', response.data);
+
+      navigation.navigate('Login', {role : 'student'})
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
     <ScrollView style={style.container}>
 
@@ -115,7 +142,7 @@ const SignUpStudentScreen = () => {
 
 
 
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={handleFormSubmit}>
                 <Text style={{color : '#ff9900'}} className="text-center mt-3 font-light ">Already have an account? click here </Text>
 
               </TouchableOpacity>

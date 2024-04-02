@@ -56,10 +56,10 @@ const WelcomeScreen = () => {
 
             <View className='flex justify-center items-center' >
 
-              <TouchableOpacity onPress={() => navigation.navigate("SignupDri")}  >
+              <TouchableOpacity onPress={() => navigation.navigate("SignupDri", {role : "driver"})}  >
                   <Text style={[styles.background, styles.text]} className="p-4 text-center rounded-md mt-10 ml-5 mr-5 w-80 font-extrabold">Register as a Driver</Text>
               </TouchableOpacity >
-                <TouchableOpacity onPress={() => navigation.navigate("SignupStu")}>
+                <TouchableOpacity onPress={() => navigation.navigate("SignupStu", {role : "student"})}>
                   <Text style={[styles.backgroundTwo, styles.text]}  className="p-4 text-center rounded-md mt-3  ml-5 mr-5 w-80 font-extrabold">Register as a Student</Text>
                 </TouchableOpacity>
 
