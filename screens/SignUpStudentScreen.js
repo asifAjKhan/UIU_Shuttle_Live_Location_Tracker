@@ -15,7 +15,7 @@ import
 import React, { useState } from 'react'
 
 import {styles} from '../theme'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import axios from 'axios';
 
@@ -25,13 +25,17 @@ import axios from 'axios';
 const ios = Platform.OS === "ios";
 const topMargin = ios? '' : 'mt-10'
 
-const SignUpStudentScreen = () => {
+const SignUpStudentScreen = ({route}) => {
+
+  const {role} = route.params
+
+  console.log(role)
 
   const navigation = useNavigation()
 
 
 
-  //const {role} = router.param
+  
 
 
   const [name, setName] = useState('');
@@ -41,6 +45,7 @@ const SignUpStudentScreen = () => {
   const handleFormSubmit = async () => {
     try {
       const response = await axios.post('http://192.168.0.102:3000/auth/register', {
+        role,
         name,
         email,
         password
@@ -60,13 +65,9 @@ const SignUpStudentScreen = () => {
       <StatusBar
               animated={true}
               backgroundColor="transparent"
-              //barStyle="dark-content" 
               barStyle="light-content"
               translucent={true} 
-              //color = "white"
-            // barStyle={}
-            // showHideTransition={statusBarTransition}
-            // hidden={hidden}
+             
       />
 
       <SafeAreaView className={""+topMargin}>
@@ -101,6 +102,9 @@ const SignUpStudentScreen = () => {
               className="font-semibold ml-5 mr-5 text-lg "
               placeholder='Student Id'
               placeholderTextColor="#999"
+
+              value={name}
+              onChangeText={text => setName(text)}
             />
 
             <TextInput
@@ -117,6 +121,8 @@ const SignUpStudentScreen = () => {
               placeholder='Email'
               placeholderTextColor="#999"
               keyboardType="email-address" 
+              value={email}
+              onChangeText={text => setEmailOrPhone(text)}
             />
 
             <TextInput
@@ -133,16 +139,19 @@ const SignUpStudentScreen = () => {
               placeholder='Password'
               placeholderTextColor="#999"
               secureTextEntry 
+
+              value={password}
+              onChangeText={text => setPassword(text)}
             />
 
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleFormSubmit}>
               <Text style={[styles.background, styles.text]}  className="p-4 text-center rounded-md mt-9  ml-5 mr-5 w-80 font-extrabold">Register</Text>
             </TouchableOpacity>
 
 
 
-            <TouchableOpacity onPress={handleFormSubmit}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login", {role : "student"})}>
                 <Text style={{color : '#ff9900'}} className="text-center mt-3 font-light ">Already have an account? click here </Text>
 
               </TouchableOpacity>

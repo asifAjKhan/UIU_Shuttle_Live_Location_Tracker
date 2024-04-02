@@ -7,217 +7,89 @@ import { Bars3BottomRightIcon, MapPinIcon } from "react-native-heroicons/solid";
 import { Bars3BottomLeftIcon } from "react-native-heroicons/solid";
 import * as Location from 'expo-location'
 import { useEffect } from "react";
-
-
 import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
 
 
 
 const ios = Platform.OS === "ios";
 const topMargin = ios? '' : 'mt-3'
-
-
 const LOCATION_DISTANCE_THRESHOLD = 1;
 
 
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
 
-  //const [location, setLocation] = useState({})
+  const {role} = route.params
 
-// const [connectButton, setConnectButton] = useState(false)
+  console.log("My role is "+role)
 
  const [errmsg, setErrMsg] = useState("");
- const [userLat, setUserLat] = useState(null);
- const [userLong, setUserLong] = useState(null)
+ const [location, setLocation] = useState();
 
- useEffect(() => {
+ const [driverLocations, setDriverLocations] = useState([])
 
-  
+      useEffect(() => {
 
-    let subscription : Location.Subscription | null = null;
+        if(role != "student"){
+          
+          let subscription : Location.Subscription | null = null;
 
-    (async () => {
-      const {status} = await Location.requestForegroundPermissionsAsync();
-      if(status !== "granted") {
-        Alert.alert("Permission to access location was denied")
-        return;
-      }
+          (async () => {
+            const {status} = await Location.requestForegroundPermissionsAsync();
+            if(status !== "granted") {
+              Alert.alert("Permission to access location was denied")
+              return;
+            }
 
 
-      subscription = await Location.watchPositionAsync(
-        {
-          accuracy : Location.Accuracy.High,
-          distanceInterval : LOCATION_DISTANCE_THRESHOLD
-        },
-        (location) => {
-          const {coords} = location;
-          const {latitude, longitude} = coords;
+            subscription = await Location.watchPositionAsync(
+              {
+                accuracy : Location.Accuracy.High,
+                distanceInterval : LOCATION_DISTANCE_THRESHOLD
+              },
+              (location) => {
+                const {coords} = location;
+                console.log(location)
+                setLocation(coords)
+              }
+            );
+          })()
 
-          console.log("userLatitude" , latitude)
-          console.log("userLongitude", longitude)
+          return () => {
+              if(subscription){
+                subscription.remove()
+              }
 
-          setUserLat(latitude)
-          setUserLong(longitude)
+          }
+
+
+        }else{
+          (async () => {
+
+            try{
+              const getAllDriverLocation = await axios.get("http://localhost:3000/d_location/all")
+
+              if(getAllDriverLocation){
+                setDriverLocations(getAllDriverLocation.data)
+                console.log(getAllDriverLocation.data)
+              }
+
+            }catch(err){
+              console.log(err)
+            }
+
+          })()
         }
-      );
-    })()
-
-
-
-
-  return () => {
-      if(subscription){
-        subscription.remove()
-      }
-
-  }
+        
+          
  }, [])
 
- 
-
-
-
-
-//   useEffect(() => {
-//     const getLocation = async () => {
-//       try {
-//         const { status } = await Location.requestForegroundPermissionsAsync();
-//         if (status !== "granted") {
-//           console.error("Permission to access location was denied");
-//           return;
-//         }
-
-//         Location.watchPositionAsync(
-//           { accuracy: Location.Accuracy.High, timeInterval: 3000 },
-//           (newLocation) => {
-//             const { latitude, longitude } = newLocation.coords;
-//             setLocation({ latitude, longitude });
-//           }
-//         );
-//       } catch (error) {
-//         console.error('Error fetching location:', error);
-//       }
-//     };
-
-//     getLocation();
-
-//     console.log(location)
-//   }, []);
-
-  
-//  console.log(location)
-
-
-
-
-
-
-
-
-
-
-
-  // const [region, setRegion] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(null);
-
-  // useEffect(() => {
-  //   const getLocation = async () => {
-  //     try {
-  //       const { status } = await Location.requestForegroundPermissionsAsync();
-  //       if (status !== "granted") {
-  //         setErrorMsg("Permission to access location was denied");
-  //         return;
-  //       }
-
-  //       setInterval(async () => {
-  //         const location = await Location.getCurrentPositionAsync({});
-  //         const { coords } = location;
-  //         // const newRegion = {
-  //         //   latitude: coords.latitude,
-  //         //   longitude: coords.longitude,
-  //         //   latitudeDelta: 0.01,
-  //         //   longitudeDelta: 0.01
-  //         // };
-  //        // setRegion(newRegion);
-  //         setLocation(coords)
-  //       }, 3000);
-  //     } catch (error) {
-  //       console.error('Error fetching location:', error);
-  //       setErrorMsg("Error fetching location");
-  //     }
-  //   };
-
-  //   getLocation();
-  // }, []);
-
-
-
-//   const getPermissions = async () => {
-//     let {status} = await Location.requestForegroundPermissionsAsync();
-//     if(status !== 'granted') {
-//         console.log("Please grant location permissions")
-//         return;
-//     }
-
-
-//     //  let currentLocation = await Location.getCurrentPositionAsync({})
-//     //  setLocation(currentLocation)
-
-//     // setInterval( async () => {
-
-//     //   currentLocation = await Location.getCurrentPositionAsync({})
-//     //   setLocation(currentLocation)
-
-//     // }, 1000)
-
-//          let locationSubscription = await Location.watchPositionAsync(
-//             { accuracy: Location.Accuracy.High, timeInterval: 3000 },
-//             newLocation => {
-//               setLocation(newLocation);
-//              // sendLocationToServer(newLocation.coords.latitude, newLocation.coords.longitude);
-//             }
-//           );
    
 
-   
-
-//   }
-
-
- 
-
- // console.log(location)
-
-//  //console.log("Asif"+location.coords.longitude)
-//  //console.log("Asif"+location.coords.latitude)
-
-//  //console.log(" Asif : " + location.coords.latitude)
-
- 
-    
-//   //location && console.log(location)
-
-  
-
-
-
-  
-
-//   const handleLocationPress = () => {
-//     getPermissions();
-
-//   }
-
- 
-
-  
-  
 
   return (
     <View style={styles.container}>
-
-     
 
         <View style={styles.topBoxColor} className="rounded-2xl   flex-row  items-center  ml-2 shadow-lg w-80 mt-3 absolute top-10 z-20 " >
           <TouchableOpacity className="ml-3 rounded-lg p-2 bg-black" onPress={() => setConnectButton(prev => !prev)} >
@@ -242,31 +114,22 @@ const HomeScreen = () => {
       }}
       >
 
-         { userLat && <Marker
+         { location && <Marker
             coordinate={{
-              latitude : userLat,
-              longitude : userLong
+              latitude : location.latitude,
+              longitude : location.longitude
             }}
             title="You are here"
-           // draggable
-            //onDragEnd={(e) => setLocation(e.nativeEvent.coordinate)}
+           
           />}
 
 
-        
-     
-       
-       
-        
       </MapView>
 
 
     <View>
 
     </View>
-
-
-
 
   </View>
   );
@@ -279,8 +142,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#3D3535",
-   // alignItems: "center",
-   // justifyContent: "center",
+
   },
 
   map: {

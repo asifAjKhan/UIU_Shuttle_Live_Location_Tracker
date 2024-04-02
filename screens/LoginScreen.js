@@ -44,7 +44,7 @@ const LoginScreen = () => {
 
       console.log("LogIn successfully", logInResponse.data);
 
-      navigation.navigate("Home",{ role :"sutdent"})
+      navigation.navigate("Home",{role :"sutdent"})
 
     }catch(err){
       console.error('Error submitting form:', err);
