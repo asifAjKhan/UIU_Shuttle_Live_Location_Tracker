@@ -39,7 +39,7 @@ const SignUpDriverScreen = () => {
 
   const handleFormSubmit = async () => {
       try {
-        const response = await axios.post('http://192.168.0.102:3000/auth/register', {
+        const response = await axios.post('http://10.10.247.47:3000/auth/register', {
           role,
           name,
           email,
@@ -182,7 +182,7 @@ const SignUpDriverScreen = () => {
 
 
 
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login", {role : "driver"})}>
                 <Text style={{color : '#ff9900'}} className="text-center mt-3 font-light ">Already have an account? click here </Text>
 
               </TouchableOpacity>

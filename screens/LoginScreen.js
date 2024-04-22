@@ -22,11 +22,15 @@ import
   var {width, height} = Dimensions.get('window')
 
 
-const LoginScreen = () => {
+const LoginScreen = ({route}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation()
+
+  const {role} = route.params
+
+  //console.log(role)
 
 
   const handlePasswordChange = (text) => {
@@ -40,11 +44,12 @@ const LoginScreen = () => {
   const handleLogin = async () => {
 
     try{
-      const logInResponse = await axios.post("http://192.168.0.102:3000/auth/login",{email,password})
+      const logInResponse = await axios.post("http://10.10.247.47:3000/auth/login",{role,email,password})
+      
+      console.log("LogIn successfully", logInResponse.data.others);
 
-      console.log("LogIn successfully", logInResponse.data);
-
-      navigation.navigate("Home",{role :"sutdent"})
+      navigation.navigate("Home", {role : role, userData : logInResponse.data.others})
+      
 
     }catch(err){
       console.error('Error submitting form:', err);
