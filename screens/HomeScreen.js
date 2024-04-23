@@ -1,10 +1,6 @@
-import {LOCALHOST} from '@env'
 import { useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-
-
-
 
 import 
 { StyleSheet,
@@ -43,7 +39,7 @@ const HomeScreen = ({route}) => {
 
   const navigation = useNavigation()
 
-  console.log("From Home User : " + userData._id)
+  //console.log("From Home User : " + userData._id)
   
 
   //console.log("My role is "+role)
@@ -103,7 +99,7 @@ const HomeScreen = ({route}) => {
 
       async function postLoc () {
         if(role == 'driver'){
-          const postLocation = await axios.post(`http://${LOCALHOST}:3000/d_location/`, {
+          const postLocation = await axios.post(`http://192.168.0.101:3000/d_location/`, {
             driver_id : userData._id,
             latitude : location.latitude ,
             longitude : location.longitude 
@@ -114,6 +110,7 @@ const HomeScreen = ({route}) => {
               //Set Location Table Id
 
               setDrvierLocationID(res.data.location._id)
+              console.log("Driver_Location_id : " + res.data.location._id)
 
              // console.log("Location table id : " + res.data.location._id)
 
@@ -141,7 +138,7 @@ const HomeScreen = ({route}) => {
     const getAllTheDriverLocation = async () => {
       try{
 
-        const getAllDriverLocation = await axios.get(`http://${LOCALHOST}:3000/d_location/all`)
+        const getAllDriverLocation = await axios.get(`http://192.168.0.101:3000/d_location/all`)
         //console.log(getAllDriverLocation.data)
         setDriverLocations(getAllDriverLocation.data)
         
@@ -178,7 +175,7 @@ const HomeScreen = ({route}) => {
 
         async function update(){
           try{
-            const postLocation = await axios.put(`http://${LOCALHOST}:3000/d_location/`, {
+            const postLocation = await axios.put(`http://192.168.0.101:3000/d_location/`, {
             _id : driverLocationID,
             latitude :  location.latitude,
             longitude :   location.longitude
@@ -197,34 +194,35 @@ const HomeScreen = ({route}) => {
           }
 
       }
+      if(role=="driver"){
+        update()
 
-      update()
+      }
+
       },[location])
 
 
       //LogOut Handler 
 
 
-      const handleLogOut = () => {
+      const handleLogOut = async () => {
 
-        const deleteLocation = async () => {
-            const deleteResponse = await axios.delete(`http://${LOCALHOST}:3000/d_location/`, {_id : driverLocationID})
-            .then((data) => {
-              console.log(data)
-              navigation.navigate("welcome");
+          if(role=="driver"){
+            await axios.delete(`http://192.168.0.101:3000/d_location/${driverLocationID}`)
+              .then((data) => {
+                console.log(data)
+                
 
-            })
-            .catch((err) => {
+              })
+              .catch((err) => {
+                  console.log(err)
+              })
 
-            })
+          }
+
+          navigation.navigate("welcome");
             
-            // if(deleteResponse){
-            //   console.log("driver LogOut Successfully " + deleteResponse)
-            //   navigation.navigate("welcome");
-            // }
-        }
-
-        deleteLocation()
+          
         
 
       }
@@ -293,7 +291,7 @@ const HomeScreen = ({route}) => {
                        style = {{height : 80, width : 80}}
                     />
                     <Text className="text-white font-bold text-lg">{userData.name}</Text>
-                    <Text className="font-light text-gray-200">omorfaruk@gmail.coms</Text>
+                    <Text className="font-light text-gray-200">{userData.email}</Text>
 
                   </View>
 

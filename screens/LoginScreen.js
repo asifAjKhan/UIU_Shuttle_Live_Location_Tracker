@@ -1,4 +1,4 @@
-import {LOCALHOST} from '@env'
+
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -45,7 +45,7 @@ const LoginScreen = ({route}) => {
   const handleLogin = async () => {
 
     try{
-      const logInResponse = await axios.post(`http://${LOCALHOST}:3000/auth/login`,{role,email,password})
+      const logInResponse = await axios.post(`http://192.168.0.101:3000/auth/login`,{role,email,password})
       
       console.log("LogIn successfully", logInResponse.data.others);
 

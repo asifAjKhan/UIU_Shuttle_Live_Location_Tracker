@@ -1,4 +1,4 @@
-import {LOCALHOST} from '@env'
+
 import 
 { View, 
   Text, 
@@ -40,7 +40,7 @@ const SignUpDriverScreen = () => {
 
   const handleFormSubmit = async () => {
       try {
-        const response = await axios.post(`http:/${LOCALHOST}:3000/auth/register`, {
+        const response = await axios.post(`http://192.168.0.101:3000/auth/register`, {
           role,
           name,
           email,
@@ -56,18 +56,6 @@ const SignUpDriverScreen = () => {
 
   
     
-  
-
-
-
-
-
-
-
-
-
-  
-
 
 
   return (
