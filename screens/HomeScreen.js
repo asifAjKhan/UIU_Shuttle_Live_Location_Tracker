@@ -1,6 +1,11 @@
+import {LOCALHOST} from '@env'
 import { useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
+
+
+
+
 import 
 { StyleSheet,
    Text,
@@ -38,7 +43,7 @@ const HomeScreen = ({route}) => {
 
   const navigation = useNavigation()
 
-  //console.log("From Home User : " + userData._id)
+  console.log("From Home User : " + userData._id)
   
 
   //console.log("My role is "+role)
@@ -98,7 +103,7 @@ const HomeScreen = ({route}) => {
 
       async function postLoc () {
         if(role == 'driver'){
-          const postLocation = await axios.post("http://10.10.247.47:3000/d_location/", {
+          const postLocation = await axios.post(`http://${LOCALHOST}:3000/d_location/`, {
             driver_id : userData._id,
             latitude : location.latitude ,
             longitude : location.longitude 
@@ -136,7 +141,7 @@ const HomeScreen = ({route}) => {
     const getAllTheDriverLocation = async () => {
       try{
 
-        const getAllDriverLocation = await axios.get("http://192.168.0.101:3000/d_location/all")
+        const getAllDriverLocation = await axios.get(`http://${LOCALHOST}:3000/d_location/all`)
         //console.log(getAllDriverLocation.data)
         setDriverLocations(getAllDriverLocation.data)
         
@@ -173,7 +178,7 @@ const HomeScreen = ({route}) => {
 
         async function update(){
           try{
-            const postLocation = await axios.put(`http://192.168.0.101:3000/d_location/`, {
+            const postLocation = await axios.put(`http://${LOCALHOST}:3000/d_location/`, {
             _id : driverLocationID,
             latitude :  location.latitude,
             longitude :   location.longitude
@@ -203,7 +208,7 @@ const HomeScreen = ({route}) => {
       const handleLogOut = () => {
 
         const deleteLocation = async () => {
-            const deleteResponse = await axios.delete("http://192.168.0.101:3000/d_location/", {_id : driverLocationID})
+            const deleteResponse = await axios.delete(`http://${LOCALHOST}:3000/d_location/`, {_id : driverLocationID})
             .then((data) => {
               console.log(data)
               navigation.navigate("welcome");
@@ -287,7 +292,7 @@ const HomeScreen = ({route}) => {
                        source={require("../assets/logo_driver.png")} 
                        style = {{height : 80, width : 80}}
                     />
-                    <Text className="text-white font-bold text-lg">Omor Faruk Onik</Text>
+                    <Text className="text-white font-bold text-lg">{userData.name}</Text>
                     <Text className="font-light text-gray-200">omorfaruk@gmail.coms</Text>
 
                   </View>
