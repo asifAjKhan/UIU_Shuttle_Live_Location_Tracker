@@ -50,6 +50,10 @@ const HomeScreen = ({route}) => {
  const [driverLocations, setDriverLocations] = useState([])
  const [driverLocationID, setDrvierLocationID] = useState("")
 
+// const [drTitle, setDrTitle] = useState("")
+
+ const [address, setAddress] = useState("")
+
 
  
       // for getting location permission and the location condinate of the user or driver
@@ -72,7 +76,7 @@ const HomeScreen = ({route}) => {
               
               (location) => {
                 const {coords} = location;
-                //console.log(location)
+               
                 setLocation(coords)
 
 
@@ -99,7 +103,7 @@ const HomeScreen = ({route}) => {
 
       async function postLoc () {
         if(role == 'driver'){
-          const postLocation = await axios.post(`http://192.168.0.101:3000/d_location/`, {
+          const postLocation = await axios.post(`http://10.10.233.224:3000/d_location/`, {
             driver_id : userData._id,
             latitude : location.latitude ,
             longitude : location.longitude 
@@ -138,7 +142,7 @@ const HomeScreen = ({route}) => {
     const getAllTheDriverLocation = async () => {
       try{
 
-        const getAllDriverLocation = await axios.get(`http://192.168.0.101:3000/d_location/all`)
+        const getAllDriverLocation = await axios.get(`http://10.10.233.224:3000/d_location/all`)
         //console.log(getAllDriverLocation.data)
         setDriverLocations(getAllDriverLocation.data)
         
@@ -175,7 +179,7 @@ const HomeScreen = ({route}) => {
 
         async function update(){
           try{
-            const postLocation = await axios.put(`http://192.168.0.101:3000/d_location/`, {
+            const postLocation = await axios.put(`http://10.10.233.224:3000/d_location/`, {
             _id : driverLocationID,
             latitude :  location.latitude,
             longitude :   location.longitude
@@ -208,7 +212,7 @@ const HomeScreen = ({route}) => {
       const handleLogOut = async () => {
 
           if(role=="driver"){
-            await axios.delete(`http://192.168.0.101:3000/d_location/${driverLocationID}`)
+            await axios.delete(`http://10.10.233.224:3000/d_location/${driverLocationID}`)
               .then((data) => {
                 console.log(data)
                 
@@ -266,6 +270,27 @@ const HomeScreen = ({route}) => {
     let drawerRef;
 
 
+    //console.log("My Locatin : " , location.latitude , location.latitude , location.altitude, location.accuracy )
+
+    //get Driver Info by Id
+
+    const onMarkerPress = async (ind) => {
+
+      
+      const reverseGeoCodeAddress = await Location.reverseGeocodeAsync({
+        latitude : location.latitude,
+        longitude : location.longitude
+      })
+
+      setAddress(reverseGeoCodeAddress[0].formattedAddress)
+      // await axios.get(`http://192.168.0.101:3000/driver/${driver_id}`)
+      // .then((res) => {
+      //   setDrTitle(res.data.name)
+      // })
+      // .catch((err) => {
+      //   console.log(err)
+      // })
+    }
 
  
 
@@ -286,10 +311,17 @@ const HomeScreen = ({route}) => {
                 >
                   <View className="justify-center mt-40 ml-8">
 
-                    <Image 
+                    {role == "driver" && <Image 
                        source={require("../assets/logo_driver.png")} 
                        style = {{height : 80, width : 80}}
-                    />
+                    />}
+
+                    {role == "student" && <Image 
+                       source={require("../assets/StudentIcon.png")} 
+                       style = {{height : 80, width : 80}}
+                    />}
+
+
                     <Text className="text-white font-bold text-lg">{userData.name}</Text>
                     <Text className="font-light text-gray-200">{userData.email}</Text>
 
@@ -315,30 +347,30 @@ const HomeScreen = ({route}) => {
               {/* <MapPinIcon color="white" /> */}
 
             </TouchableOpacity>
-            <Text className="text-white font-bold p-5 ml-2 text-xl">Shuttle Location</Text>
+            <Text className="text-white font-bold p-5 ml-2 text-xl">{address}</Text>
 
           </View>
 
 
-          <MapView
+          {location.latitude && <MapView
             style={styles.map}
           // onRegionChange={onRegionChange}
             initialRegion={{
-            latitude: 23.798028012899962,
-            latitudeDelta: 0.0008512833927092345,
-            longitude: 90.44958399608731,
-            longitudeDelta: 0.0004268065094947815,
+            latitude: location.latitude ? location.latitude : 23.798028012899962,
+            longitude:location.longitude ? location.longitude : 90.44958399608731,
+            latitudeDelta: 0.00922,
+            longitudeDelta: 0.00421,
           }}
           >
 
 
 
-            { location.latitude && <Marker
+            { location.latitude && role != 'driver' && <Marker
                 coordinate={{
                   latitude : location.latitude,
                   longitude : location.longitude
                 }}
-                title="You are here"
+                title={userData.name}
               
                 
               
@@ -354,9 +386,11 @@ const HomeScreen = ({route}) => {
                       }}
 
                       image={require("../assets/busIcon.png")}
+                      onPress={(e) => onMarkerPress(ind)}
+                      title= {"Driver"}
+                      
+                     
 
-                      
-                      
                     
                     />
                 ))
@@ -365,7 +399,7 @@ const HomeScreen = ({route}) => {
               
 
 
-          </MapView>
+          </MapView>}
 
 
         <View>
