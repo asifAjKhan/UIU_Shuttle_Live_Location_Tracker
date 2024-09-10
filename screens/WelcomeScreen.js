@@ -63,7 +63,7 @@ const WelcomeScreen = () => {
                   <Text style={[styles.backgroundTwo, styles.text]}  className="p-4 text-center rounded-md mt-3  ml-5 mr-5 w-80 font-extrabold">Register as a Student</Text>
                 </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Login", {role : 'student'})}>
                 <Text style={{color : '#ff9900'}} className="text-center mt-3 font-light ">Already have an account? click here </Text>
 
               </TouchableOpacity>

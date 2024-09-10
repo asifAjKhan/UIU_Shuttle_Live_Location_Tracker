@@ -46,7 +46,7 @@ const SignUpStudentScreen = ({route}) => {
 
   const handleFormSubmit = async () => {
     try {
-      const response = await axios.post(`http://10.10.233.224:3000/auth/register`, {
+      const response = await axios.post(`http://10.10.250.63:3000/auth/register`, {
         role,
         name,
         email,

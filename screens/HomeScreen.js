@@ -103,7 +103,7 @@ const HomeScreen = ({route}) => {
 
       async function postLoc () {
         if(role == 'driver'){
-          const postLocation = await axios.post(`http://10.10.233.224:3000/d_location/`, {
+          const postLocation = await axios.post(`http://10.10.250.63:3000/d_location/`, {
             driver_id : userData._id,
             latitude : location.latitude ,
             longitude : location.longitude 
@@ -142,7 +142,7 @@ const HomeScreen = ({route}) => {
     const getAllTheDriverLocation = async () => {
       try{
 
-        const getAllDriverLocation = await axios.get(`http://10.10.233.224:3000/d_location/all`)
+        const getAllDriverLocation = await axios.get(`http://10.10.250.63:3000/d_location/all`)
         //console.log(getAllDriverLocation.data)
         setDriverLocations(getAllDriverLocation.data)
         
@@ -179,7 +179,7 @@ const HomeScreen = ({route}) => {
 
         async function update(){
           try{
-            const postLocation = await axios.put(`http://10.10.233.224:3000/d_location/`, {
+            const postLocation = await axios.put(`http://10.10.250.63:3000/d_location/`, {
             _id : driverLocationID,
             latitude :  location.latitude,
             longitude :   location.longitude
@@ -212,7 +212,7 @@ const HomeScreen = ({route}) => {
       const handleLogOut = async () => {
 
           if(role=="driver"){
-            await axios.delete(`http://10.10.233.224:3000/d_location/${driverLocationID}`)
+            await axios.delete(`http://10.10.250.63:3000/d_location/${driverLocationID}`)
               .then((data) => {
                 console.log(data)
                 

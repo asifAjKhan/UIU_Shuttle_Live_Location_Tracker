@@ -45,7 +45,7 @@ const LoginScreen = ({route}) => {
   const handleLogin = async () => {
 
     try{
-      const logInResponse = await axios.post(`http://10.10.233.224:3000/auth/login`,{role,email,password})
+      const logInResponse = await axios.post(`http://10.10.250.63:3000/auth/login`,{role,email,password})
       
       console.log("LogIn successfully", logInResponse.data.others);
 
