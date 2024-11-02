@@ -15,6 +15,8 @@ import
       
 } from "react-native";
 
+import {IP_ADDRESS_OF_NETWORK} from '@env'
+
 import MapView, { Marker } from "react-native-maps";
 import { ArrowLeftIcon, Bars3BottomRightIcon, MapPinIcon, UserGroupIcon } from "react-native-heroicons/solid";
 import { Bars3BottomLeftIcon } from "react-native-heroicons/solid";
@@ -24,6 +26,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 
 import { useNavigation} from '@react-navigation/native';
+
+
 
 
 
@@ -103,7 +107,7 @@ const HomeScreen = ({route}) => {
 
       async function postLoc () {
         if(role == 'driver'){
-          const postLocation = await axios.post(`http://10.10.250.63:3000/d_location/`, {
+          const postLocation = await axios.post(`http://${IP_ADDRESS_OF_NETWORK}:3000/d_location/`, {
             driver_id : userData._id,
             latitude : location.latitude ,
             longitude : location.longitude 
@@ -142,7 +146,7 @@ const HomeScreen = ({route}) => {
     const getAllTheDriverLocation = async () => {
       try{
 
-        const getAllDriverLocation = await axios.get(`http://10.10.250.63:3000/d_location/all`)
+        const getAllDriverLocation = await axios.get(`http://${IP_ADDRESS_OF_NETWORK}:3000/d_location/all`)
         //console.log(getAllDriverLocation.data)
         setDriverLocations(getAllDriverLocation.data)
         
@@ -179,7 +183,7 @@ const HomeScreen = ({route}) => {
 
         async function update(){
           try{
-            const postLocation = await axios.put(`http://10.10.250.63:3000/d_location/`, {
+            const postLocation = await axios.put(`http://${IP_ADDRESS_OF_NETWORK}:3000/d_location/`, {
             _id : driverLocationID,
             latitude :  location.latitude,
             longitude :   location.longitude
@@ -212,7 +216,7 @@ const HomeScreen = ({route}) => {
       const handleLogOut = async () => {
 
           if(role=="driver"){
-            await axios.delete(`http://10.10.250.63:3000/d_location/${driverLocationID}`)
+            await axios.delete(`http://${IP_ADDRESS_OF_NETWORK}:3000/d_location/${driverLocationID}`)
               .then((data) => {
                 console.log(data)
                 

@@ -18,6 +18,8 @@ import
 
   import {MapPinIcon} from 'react-native-heroicons/solid'
 
+  import {IP_ADDRESS_OF_NETWORK} from '@env'
+
 
 
   var {width, height} = Dimensions.get('window')
@@ -33,6 +35,8 @@ const LoginScreen = ({route}) => {
 
   //console.log(role)
 
+  //console.log("This is the ip address of the network "+IP_ADDRESS_OF_NETWORK)
+
 
   const handlePasswordChange = (text) => {
     setPassword(text)
@@ -45,7 +49,7 @@ const LoginScreen = ({route}) => {
   const handleLogin = async () => {
 
     try{
-      const logInResponse = await axios.post(`http://10.10.250.63:3000/auth/login`,{role,email,password})
+      const logInResponse = await axios.post(`http://${IP_ADDRESS_OF_NETWORK}:3000/auth/login`,{role,email,password})
       
       console.log("LogIn successfully", logInResponse.data.others);
 

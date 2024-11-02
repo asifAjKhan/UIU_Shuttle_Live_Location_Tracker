@@ -6,6 +6,7 @@ import {LinearGradient} from 'expo-linear-gradient'
 
 import {styles} from '../theme'
 import { useNavigation } from '@react-navigation/native'
+import {IP_ADDRESS_OF_NETWORK} from '@env'
 
 
 
